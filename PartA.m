@@ -18,8 +18,8 @@ dt = T/(n-1);
 fprintf("Sampling rate at: %.2f", dt);
 
 % Preallocate trajectory arrays
-g_oh_traj = zeros(4,4,n);
-g_od_traj = zeros(4,4,n);
+H_traj = zeros(4,4,n);
+D_traj = zeros(4,4,n);
 
 T_hinge = transl([0 2 0]);   % hinge at (0,2,0)
 
@@ -31,8 +31,8 @@ for k = 1:n
     T_H0 = T_D0 * T_HD;                         % knob in world
 
     % Store transforms into trajectory arrays
-    g_od_traj(:,:,k) = T_D0;
-    g_oh_traj(:,:,k) = T_H0;
+    D_traj(:,:,k) = T_D0;
+    H_traj(:,:,k) = T_H0;
 
     clf; axis equal; grid on; view(35,25); hold on
     xlabel X; ylabel Y; zlabel Z
@@ -57,17 +57,17 @@ for k = 1:n
 end
 
 % Save trajectories for Part B
-save('partA_oh_traj.mat', 'g_oh_traj');
-save('partA_od_traj.mat', 'g_od_traj');
+save('partA_H_trajectory.mat', 'H_traj');
+save('partA_D_trajectory.mat', 'D_traj');
 
 % --- Additional Plots for Part A ---
 
-% Extract handle position and quaternion from g_oh_traj
+% Extract handle position and quaternion from H_traj
 p_h_traj = zeros(n, 3);   % handle positions
 q_h_traj = zeros(n, 4);   % handle quaternions
 
 for k = 1:n
-    gH = g_oh_traj(:,:,k);
+    gH = H_traj(:,:,k);
     p_h_traj(k, :) = transl(gH)';                     % [x, y, z]
     q_h_traj(k, :) = UnitQuaternion(gH).double;       % [q0, q1, q2, q3]
 end

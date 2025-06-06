@@ -9,12 +9,12 @@ ur10 = ur10robot();
 T = 5;
 
 % Load Part A trajectories (handle frame {H} and door frame {D})
-load('partA_oh_traj.mat','g_oh_traj');
-load('partA_od_traj.mat','g_od_traj');
+load('partA_H_trajectory.mat', 'H_traj');
+load('partA_D_trajectory.mat', 'D_traj');
 
 % Number of time steps from Part A (501 frames (N1 = 201 and N2 = 300)) and
 % now dt is T / (n - 1) = 5 sec / (501 - 1) = 0.01 sec sampling rate.
-n  = size(g_oh_traj, 3);
+n  = size(H_traj, 3);
 dt = T / (n - 1);
 fprintf("Sampling rate at: %.2f", dt);
 time = linspace(0, T, n);
@@ -39,7 +39,7 @@ q_traj(1, :) = q0;
 
 % Inverse-kinematics: {e} → {H}⋅g_he
 for k = 2:n
-    g_H = g_oh_traj(:, :, k);      % handle frame in world
+    g_H = H_traj(:, :, k);      % handle frame in world
     g_e_des = g_H * g_he;          % desired end–effector pose
 
     g_e_curr = ur10.fkine(q);      % current EE pose
@@ -86,8 +86,8 @@ for k_idx = 1:length(idx)
     ur10.animate(q_traj(i, :));  % robot at step i
 
     g_e = ur10.fkine(q_traj(i, :));   % end–effector
-    g_H = g_oh_traj(:, :, i);         % handle
-    g_D = g_od_traj(:, :, i);         % door
+    g_H = H_traj(:, :, i);         % handle
+    g_D = D_traj(:, :, i);         % door
 
     % Remove previous plots
     if exist('h_door','var'), delete(h_door); end
@@ -175,7 +175,7 @@ grid on; title('End–Effector Quaternion vs. Time');
 p_eh_traj = zeros(n, 3);
 q_eh_traj = zeros(n, 4);
 for k = 1:n
-    g_H = g_oh_traj(:, :, k);
+    g_H = H_traj(:, :, k);
     g_e = ur10.fkine(q_traj(k, :));
     g_eh = inv(g_H) * g_e.T;
     p_eh_traj(k, :) = transl(g_eh)';
