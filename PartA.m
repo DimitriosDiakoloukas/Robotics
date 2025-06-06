@@ -8,13 +8,14 @@ l  = 1.0;          % door width
 door_height = 2.0; % door height
 
 T1 = 2; T2 = 3;  T = T1 + T2;
-N1 = 100; N2 = 150;
+N1 = 201; N2 = 300;
 
 alpha = [tpoly(0,deg2rad(-45),N1)'  tpoly(deg2rad(-45),0,N2)'];   % knob twist/return
 beta  = [zeros(1,N1)                 tpoly(0,deg2rad(-30),N2)']; % door swing
 n  = numel(alpha);
 t  = linspace(0,T,n);
 dt = T/(n-1);
+fprintf("Sampling rate at: %.2f", dt);
 
 % Preallocate trajectory arrays
 g_oh_traj = zeros(4,4,n);

@@ -12,9 +12,11 @@ T = 5;
 load('partA_oh_traj.mat','g_oh_traj');
 load('partA_od_traj.mat','g_od_traj');
 
-% Number of time steps from Part A (250)
+% Number of time steps from Part A (501 frames (N1 = 201 and N2 = 300)) and
+% now dt is T / (n - 1) = 5 sec / (501 - 1) = 0.01 sec sampling rate.
 n  = size(g_oh_traj, 3);
 dt = T / (n - 1);
+fprintf("Sampling rate at: %.2f", dt);
 time = linspace(0, T, n);
 
 % Preallocate joint trajectories
