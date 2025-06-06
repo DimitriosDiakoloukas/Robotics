@@ -59,3 +59,51 @@ end
 % Save trajectories for Part B
 save('partA_oh_traj.mat', 'g_oh_traj');
 save('partA_od_traj.mat', 'g_od_traj');
+
+% --- Additional Plots for Part A ---
+
+% Extract handle position and quaternion from g_oh_traj
+p_h_traj = zeros(n, 3);   % handle positions
+q_h_traj = zeros(n, 4);   % handle quaternions
+
+for k = 1:n
+    gH = g_oh_traj(:,:,k);
+    p_h_traj(k, :) = transl(gH)';                     % [x, y, z]
+    q_h_traj(k, :) = UnitQuaternion(gH).double;       % [q0, q1, q2, q3]
+end
+
+% Plot handle position components vs. time
+figure('Name','Handle Position vs Time','Color','w');
+plot(t, p_h_traj(:,1), 'LineWidth', 1.5); hold on;
+plot(t, p_h_traj(:,2), 'LineWidth', 1.5);
+plot(t, p_h_traj(:,3), 'LineWidth', 1.5);
+grid on; axis tight;
+xlabel('Time [s]');
+ylabel('Handle Position [m]');
+legend('x_h','y_h','z_h','Location','best');
+title('Handle Position Components Over Time');
+
+% Plot handle quaternion components vs. time
+figure('Name','Handle Orientation (Quaternion) vs Time','Color','w');
+plot(t, q_h_traj(:,1), 'LineWidth', 1.5); hold on;
+plot(t, q_h_traj(:,2), 'LineWidth', 1.5);
+plot(t, q_h_traj(:,3), 'LineWidth', 1.5);
+plot(t, q_h_traj(:,4), 'LineWidth', 1.5);
+grid on; axis tight;
+xlabel('Time [s]');
+ylabel('Quaternion Component');
+legend('q_0','q_1','q_2','q_3','Location','best');
+title('Handle Orientation (Unit Quaternion) Over Time');
+
+% Plot a (knob twist) and b (door swing) vs. time
+figure('Name','Knob Twist & Door Swing Profiles','Color','w');
+yyaxis left
+plot(t, rad2deg(alpha), 'LineWidth', 1.5);
+ylabel('Knob Twist \alpha [deg]');
+yyaxis right
+plot(t, rad2deg(beta), '--', 'LineWidth', 1.5);
+ylabel('Door Swing \beta [deg]');
+grid on; axis tight;
+xlabel('Time [s]');
+legend('\alpha (knob twist)','\beta (door swing)','Location','best');
+title('Knob Twist and Door Swing vs Time');
