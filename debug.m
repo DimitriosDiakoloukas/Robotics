@@ -3,12 +3,12 @@ clear;
 close all;
 
 % Load Part A trajectory data
-load('partA_oh_traj.mat', 'g_oh_traj');   % handle frame trajectory
-load('partA_od_traj.mat', 'g_od_traj');   % door frame trajectory
+load('partA_H_trajectory.mat', 'H_traj');   % handle frame trajectory
+load('partA_D_trajectory.mat', 'D_traj');   % door frame trajectory
 
 % Extract the initial transforms
-g_H0 = g_oh_traj(:, :, 1);   % {H}_0 (handle in world at t = 0)
-g_D0 = g_od_traj(:, :, 1);   % {D}_0 (door in world at t = 0)
+g_H0 = H_traj(:, :, 1);   % {H}_0 (handle in world at t = 0)
+g_D0 = D_traj(:, :, 1);   % {D}_0 (door in world at t = 0)
 
 % Define the fixed hand–eye transform g_he from {H} to {e}
 R_he = [0 0 -1;
